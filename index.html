@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herb Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Herb Information</h1>
+    <label for="herbInput">Enter a herb or plant:</label>
+    <input type="text" id="herbInput" placeholder="Type a herb or plant name">
+    <button onclick="getHerbInformation()">Get Information</button>
+    <div id="result"></div>
+
+    <script>
+        async function getHerbInformation() {
+            const herbInput = document.getElementById('herbInput').value.trim();
+            const resultContainer = document.getElementById('result');
+
+            if (herbInput === '') {
+                alert('Please enter a herb or plant name.');
+                return;
+            }
+
+            try {
+                // Fetch herb information from an API (replace API_URL with the actual API endpoint)
+                const apiUrl = `https://example.com/herb-api?name=${encodeURIComponent(herbInput)}`;
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error('Herb information not available.');
+                }
+
+                const herbData = await response.json();
+
+                // Display herb information
+                resultContainer.innerHTML = `
+                    <h2>${herbData.name}</h2>
+                    <p><strong>Benefits:</strong> ${herbData.benefits.join(', ')}</p>
+                    <p><strong>Consumption Methods:</strong> ${herbData.consumption.join(', ')}</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                resultContainer.innerHTML = '<p>Unable to fetch herb information.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
